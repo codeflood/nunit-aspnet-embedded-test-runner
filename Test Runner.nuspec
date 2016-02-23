@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>codeflood.nunit.aspnet.testrunner</id>
+    <version>1.0.0</version>
+    <title>NUnit ASP.NET Embedded Test Runner</title>
+    <authors>codeflood</authors>
+    <owners>codeflood</owners>
+    <licenseUrl>https://raw.githubusercontent.com/codeflood/nunit-aspnet-embedded-test-runner/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/codeflood/nunit-aspnet-embedded-test-runner/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An NUnit test runner which runs inside your ASP.NET application.</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>NUnit Test Runner</tags>
+    <dependencies>
+	  <dependency id="NUnit" version="2.6.4" />
+	  <dependency id="NUnit.Runners" version="2.6.4" />
+	</dependencies>
+  </metadata>
+  <files>
+	<file src="Test.aspx*" target="content"/>
+	<file src="build\*.*" target="build"/>
+  </files>
+</package>
