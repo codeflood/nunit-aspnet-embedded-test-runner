@@ -4,8 +4,10 @@ using NUnit.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web.UI.WebControls;
 
 namespace Codeflood.Testing
@@ -51,8 +53,7 @@ namespace Codeflood.Testing
             PreselectMethodFilters();
 
             // Run the tests immediately
-            var runValue = Request.QueryString["run"];
-            if (runValue == "true" || runValue == "1" || runValue == "yes")
+            if(IsQueryStringParamTrue("run"))
                 Run();
         }
 
@@ -88,25 +89,11 @@ namespace Codeflood.Testing
 
             var result = runner.Run(this, filter, true, LoggingThreshold.All);
 
-            // Bind results to presentation
-            gvResults.DataSource = _results;
-            gvResults.DataBind();
-
-            // Display statistics
-            ltlStats.Text = string.Format("{0} out of {1} tests run in {2} seconds.", _executedCount, result.Test.TestCount, result.Time);
-
-            if (_failedCount > 0)
-                ltlStats.Text += string.Format("<br/>{0} {1} failed", _failedCount, _failedCount == 1 ? "test" : "tests");
-
-            var skipped = result.Test.TestCount - _executedCount;
-            if (skipped > 0)
-                ltlStats.Text += string.Format("<br/>{0} {1} skipped", skipped, skipped == 1 ? "test" : "tests");
-
-            lblResult.Text = "Suite " + (result.IsSuccess ? "Passed" : "Failed");
-            if (result.IsSuccess)
-                lblResult.CssClass = "passLabel";
+            var outputFormatRaw = Request.QueryString["output"];
+            if (outputFormatRaw == "xml")
+                OutputXml(result);
             else
-                lblResult.CssClass = "failLabel";
+                OutputVisual(result);
         }
 
         protected ITestFilter ConstructFilter()
@@ -144,6 +131,40 @@ namespace Codeflood.Testing
             }
         }
 
+        protected void OutputVisual(TestResult result)
+        {
+            // Bind results to presentation
+            gvResults.DataSource = _results;
+            gvResults.DataBind();
+
+            // Display statistics
+            ltlStats.Text = string.Format("{0} out of {1} tests run in {2} seconds.", _executedCount, result.Test.TestCount, result.Time);
+
+            if (_failedCount > 0)
+                ltlStats.Text += string.Format("<br/>{0} {1} failed", _failedCount, _failedCount == 1 ? "test" : "tests");
+
+            var skipped = result.Test.TestCount - _executedCount;
+            if (skipped > 0)
+                ltlStats.Text += string.Format("<br/>{0} {1} skipped", skipped, skipped == 1 ? "test" : "tests");
+
+            lblResult.Text = "Suite " + (result.IsSuccess ? "Passed" : "Failed");
+            if (result.IsSuccess)
+                lblResult.CssClass = "passLabel";
+            else
+                lblResult.CssClass = "failLabel";
+        }
+
+        protected void OutputXml(TestResult result)
+        {
+            var builder = new StringBuilder();
+            new XmlResultWriter(new StringWriter(builder)).SaveTestResult(result);
+
+            Response.ContentType = "text/xml";
+            Response.Write(builder.ToString());
+            Response.Flush();
+            Response.End();
+        }
+
         protected void PreselectCategoryFilters()
         {
             var filterCategoriesRaw = Request.QueryString["fc"];
@@ -177,6 +198,15 @@ namespace Codeflood.Testing
                     item.Selected = true;
                 }
             }
+        }
+
+        protected bool IsQueryStringParamTrue(string key)
+        {
+            var raw = Request.QueryString[key];
+            return
+                string.Compare(raw, "true", StringComparison.OrdinalIgnoreCase) == 0 ||
+                string.Compare(raw, "yes", StringComparison.OrdinalIgnoreCase) == 0 ||
+                raw == "1";
         }
 
         #region EventListener Members
