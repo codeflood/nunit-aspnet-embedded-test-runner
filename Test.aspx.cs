@@ -45,6 +45,15 @@ namespace Codeflood.Testing
                 LoadCategories(testSuite);
                 LoadTestMethodNames(testSuite);
             }
+
+            // Select filters from query string
+            PreselectCategoryFilters();
+            PreselectMethodFilters();
+
+            // Run the tests immediately
+            var runValue = Request.QueryString["run"];
+            if (runValue == "true" || runValue == "1" || runValue == "yes")
+                Run();
         }
 
         protected void LoadTestMethodNames(ITest test)
@@ -67,6 +76,11 @@ namespace Codeflood.Testing
 
         protected void RunClick(object sender, EventArgs args)
         {
+            Run();
+        }
+
+        protected void Run()
+        { 
             var filter = ConstructFilter();
 
             var runner = new SimpleTestRunner();
@@ -126,6 +140,41 @@ namespace Codeflood.Testing
                 if (t.Tests != null)
                 {
                     FindTestMethodNames(t, list);
+                }
+            }
+        }
+
+        protected void PreselectCategoryFilters()
+        {
+            var filterCategoriesRaw = Request.QueryString["fc"];
+            if (string.IsNullOrEmpty(filterCategoriesRaw))
+                return;
+
+            foreach (var category in filterCategoriesRaw.Split(new[] {"|"}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                SelectCheckboxValue(cblCategories, category);
+            }
+        }
+
+        protected void PreselectMethodFilters()
+        {
+            var filtersRaw = Request.QueryString["fm"];
+            if (string.IsNullOrEmpty(filtersRaw))
+                return;
+
+            foreach (var filter in filtersRaw.Split(new[] {"|"}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                SelectCheckboxValue(cblMethods, filter);
+            }
+        }
+
+        protected void SelectCheckboxValue(CheckBoxList target, string value)
+        {
+            foreach (ListItem item in target.Items)
+            {
+                if (item.Value == value)
+                {
+                    item.Selected = true;
                 }
             }
         }
