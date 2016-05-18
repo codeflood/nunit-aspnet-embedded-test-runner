@@ -18,7 +18,7 @@
 	</dependencies>
   </metadata>
   <files>
-	<file src="*.pp" target="content"/>
+	<file src="output\*.pp" target="content"/>
 	<file src="build\*.*" target="build"/>
   </files>
 </package>
