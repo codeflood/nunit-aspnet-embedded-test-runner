@@ -17,6 +17,7 @@ The test runner can be used manually by accessing the `Test.aspx` page using a w
 The test runner can also be orchestrated through query string parameters to facilitate build servers. The following query string parameters can be used:
 
 | Parameter | Purpose | Example |
+| --------- | ------- | ------- |
 | fc | Pre-select category filters by value. Multiple values can be separated using pipes (`|`) | `fc=cat1|cat2` |
 | fm | Pre-select method filters by value. Multiple values can be separated using pipes (`|`) | `fm=MyNamespace.MyTestFixture.MyTest` |
 | run | Run the tests immediately | `run=true` |
