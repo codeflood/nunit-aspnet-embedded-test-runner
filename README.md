@@ -18,7 +18,7 @@ The test runner can also be orchestrated through query string parameters to faci
 
 | Parameter | Purpose | Example |
 | --------- | ------- | ------- |
-| fc | Pre-select category filters by value. Multiple values can be separated using pipes (`|`) | `fc=cat1|cat2` |
-| fm | Pre-select method filters by value. Multiple values can be separated using pipes (`|`) | `fm=MyNamespace.MyTestFixture.MyTest` |
+| fc | Pre-select category filters by value. Multiple values can be separated using pipes (`\|`) | `fc=cat1\|cat2` |
+| fm | Pre-select method filters by value. Multiple values can be separated using pipes (`\|`) | `fm=MyNamespace.MyTestFixture.MyTest` |
 | run | Run the tests immediately | `run=true` |
 | output | Output formatting to use | `output=xml` |
