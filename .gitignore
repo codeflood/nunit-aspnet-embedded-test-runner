@@ -1,7 +1,6 @@
 bin/
 obj/
-output/
+generated/
 .vs/
-packages/
 *.user
 *.nupkg
