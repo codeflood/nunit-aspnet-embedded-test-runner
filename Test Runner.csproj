@@ -5,7 +5,7 @@
     <RootNamespace>Codeflood.Testing</RootNamespace>
     <AssemblyName>Codeflood.Testing</AssemblyName>
     <TargetFramework>net462</TargetFramework>
-    <Version>1.1.4</Version>
+    <Version>1.2.0</Version>
     <Authors>codeflood</Authors>
     <Owners>codeflood</Owners>
     <Title>NUnit ASP.NET Embedded Test Runner</Title>
